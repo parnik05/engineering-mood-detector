@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ENGINEERING LIFE MOOD DETECTOR</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Engineering Life Mood Detector</h1>
+    <form id="moodForm" method="POST">
+        <label>Select your semester:</label>
+        <select name="semester" required>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+        </select>
+        <button type="submit">Check Mood</button>
+    </form>
+
+    <div id="result" class="result" style="display:none;" aria-live="polite">
+        <div class="emoji" id="emoji">🙂</div>
+        <div class="text">
+            <div id="moodText">You are feeling ...</div>
+            <div class="small" id="moodHint">Tip: take a short break or grab a coffee ☕</div>
+        </div>
+        <img id="moodGif" src="" alt="Mood GIF" class="mood-gif" />
+    </div>
+    <audio autoplay loop>
+        <source src="music.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+
+    <script>
+        document.getElementById("moodForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            let semester = document.querySelector("select[name='semester']").value;
+
+            let response = await fetch("/get_mood", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ semester: semester })
+            });
+
+            let data = await response.json();
+
+            document.getElementById("emoji").textContent = data.emoji;
+            document.getElementById("moodText").textContent = data.text;
+            document.getElementById("moodHint").textContent = data.hint;
+            document.getElementById("moodGif").src = data.gif;
+
+            document.getElementById("result").style.display = "block";
+        });
+    </script>
+</body>
+</html>

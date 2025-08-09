@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Engineering Mood</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            text-align: center;
+            background: #ffeaa7;
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            color: #d63031;
+        }
+        #progress-container {
+            width: 300px;
+            background: #ddd;
+            border-radius: 10px;
+            margin: 10px auto;
+        }
+        #progress-bar {
+            width: 0;
+            height: 25px;
+            background: #ff4757;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+        .twitter-btn {
+            background: #1DA1F2;
+            color: white;
+        }
+        img {
+            margin-top: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Semester {{ semester }}</h2>
+    <p id="roast-text">{{ mood.roast }}</p>
+
+    
+
+    <img src="{{ url_for('static', filename=mood.gif) }}" alt="Semester GIF">
+
+    <audio autoplay loop>
+        <source src="{{ url_for('static', filename='music.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <br><br>
+
+    <!-- WhatsApp Share Button -->
+    <a id="whatsapp-share" target="_blank">
+        <button class="whatsapp-btn">📲 Share on WhatsApp</button>
+    </a>
+
+    <!-- Twitter/X Share Button -->
+    <a id="twitter-share" target="_blank">
+        <button class="twitter-btn">🐦 Share on X</button>
+    </a>
+
+    <br><br>
+    <a href="{{ url_for('index') }}">🔄 Check Another Semester</a>
+
+    <script>
+        // Animate progress bar
+        let bar = document.getElementById("progress-bar");
+        let current = 0;
+        let interval = setInterval(() => {
+            if (current >= level) clearInterval(interval);
+            else {
+                current++;
+                bar.style.width = current + "%";
+                bar.innerText = current + "%";
+            }
+        }, 30);
+
+        // Share text
+        const roast = document.getElementById("roast-text").innerText;
+        const semester = "{{ semester }}";
+        const shareText = `Semester ${semester} Mood: ${roast};
+
+        // WhatsApp link
+        document.getElementById("whatsapp-share").href =
+            `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+
+        
+    </script>
+</body>
+</html>
